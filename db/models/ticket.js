@@ -35,6 +35,21 @@ export const Ticket = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        day: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: new Date().getDate()
+        },
+        month: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: new Date().getMonth()
+        },
+        year: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: new Date().getFullYear()
         }
     });
 

@@ -20,6 +20,7 @@ export const User = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
             validate: {
                 notEmpty: {
                     msg: 'Email is required'
@@ -30,6 +31,7 @@ export const User = (sequelize, DataTypes) => {
         phone: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
             validate: {
                 notEmpty: {
                     msg: 'Phone number is required'

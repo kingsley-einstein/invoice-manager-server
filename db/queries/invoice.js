@@ -34,7 +34,9 @@ export const InvoiceQueryObject = {
     },
     validate: (id) => {
         return new Promise((resolve, reject) => {
-            InvoiceModel.findById(id).then(i => {
+            InvoiceModel.findById(id, {
+                include: [TicketModel]
+            }).then(i => {
                 i.makeValid().then(item => resolve(item));
             })
             .catch(err => reject(err));
@@ -51,5 +53,15 @@ export const InvoiceQueryObject = {
             }).then(i => resolve(i))
             .catch(err => reject(err));
         });
-    } 
+    },
+    countByStatus: (status) => {
+        return new Promise((resolve, reject) => {
+            InvoiceModel.count({
+                where: {
+                    validated: status
+                }
+            }).then(r => resolve(r))
+            .catch(err => reject(err));
+        });
+    }
 };

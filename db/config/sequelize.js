@@ -20,21 +20,15 @@ const RoleModel = Role(sequelize, Sequelize);
 const TicketModel = Ticket(sequelize, Sequelize);
 const UserModel = User(sequelize, Sequelize);
 
-TicketModel.hasOne(InvoiceModel);
-InvoiceModel.belongsTo(TicketModel, {
-    as: 'ticket'
-});
+InvoiceModel.belongsTo(TicketModel);
 UserModel.hasOne(RoleModel);
-RoleModel.belongsTo(UserModel, {
-    as: 'user'
-})
 UserModel.hasMany(TicketModel, {
     as: 'tickets'
 });
 
 function syncDB() {
     return sequelize.sync({
-        force: environment.mode == 'development'
+        force: false
     });
 }
 

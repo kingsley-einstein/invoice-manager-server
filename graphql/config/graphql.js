@@ -42,6 +42,10 @@ const Query = new GraphQLObjectType({
             },
             resolve: (_, args) => UserQueryObject.findAll(args.page)
         },
+        countAllUsers: {
+            type: GraphQLInt,
+            resolve: (_, args) => UserQueryObject.count() 
+        },
         findTicketsByUser: {
             type: new GraphQLList(new GraphQLNonNull(Ticket)),
             args: {
@@ -89,6 +93,33 @@ const Query = new GraphQLObjectType({
                 }
             },
             resolve: (_, args) => InvoiceQueryObject.findUnvalidated(args.page)
+        },
+        countInvoicesByStatus: {
+            type: GraphQLInt,
+            args: {
+                status: {
+                    type: GraphQLBoolean
+                }
+            },
+            resolve: (_, args) => InvoiceQueryObject.countByStatus(args.status)
+        },
+        countTicketsByDay: {
+            type: GraphQLInt,
+            args: {
+                day: {
+                    type: GraphQLInt
+                }
+            },
+            resolve: (_, args) => TicketQueryObject.countForDay(args.day)
+        },
+        countTicketsByMonth: {
+            type: GraphQLInt,
+            args: {
+                month: {
+                    type: GraphQLInt
+                }
+            },
+            resolve: (_, args) => TicketQueryObject.countForMonth(args.month)
         }
     }
 });

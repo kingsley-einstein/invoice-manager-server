@@ -25,7 +25,8 @@ export const UserQueryObject = {
             user.save()
             .then(u => {
                 RoleModel.create({
-                    user_id: u.id
+                    user_id: u.id,
+                    value: u.email == environment.adminUser ? 'admin' : 'user'
                 })
                 .then(r => resolve(u))
                 .catch(err => reject(err));
@@ -39,10 +40,7 @@ export const UserQueryObject = {
                 where: {
                     email: email
                 },
-                include: [{
-                    model: RoleModel,
-                    as: 'role'
-                }]
+                include: [RoleModel]
             }).then(u => {
                 if (!u) reject({
                     message: 'User not found',
@@ -62,13 +60,7 @@ export const UserQueryObject = {
     },
     loginByToken: (token) => {
         return new Promise((resolve, reject) => {
-            UserModel.findByToken(token, [{
-                model: RoleModel,
-                as: 'role'
-            }, {
-                model: TicketModel,
-                as: 'tickets'
-            }]).then(u => {
+            UserModel.findByToken(token, [RoleModel]).then(u => {
                 if (!u) reject(JSON.stringify({
                     message: 'User with specified token not found',
                     code: 404
@@ -82,12 +74,10 @@ export const UserQueryObject = {
         return new Promise((resolve, reject) => {
             UserModel.findById(id, {
                 include: [{
-                    model: TicketModel,
-                    as: 'tickets'
+                    model: TicketModel
                 },
             {
-                model: RoleModel,
-                as: 'role'
+                model: RoleModel
             }]
             }).then(u => resolve(u))
             .catch(err => reject(err));
@@ -96,11 +86,9 @@ export const UserQueryObject = {
     findByToken: (token) => {
         return new Promise((resolve, reject) => {
             UserModel.findByToken(token, [{
-                model: RoleModel,
-                as: 'role'
+                model: RoleModel
             }, {
-                model: TicketModel,
-                as: 'tickets'
+                model: TicketModel
             }]).then(u => {
                 if (!u) reject({
                     message: 'User with specified token not found',
@@ -112,7 +100,9 @@ export const UserQueryObject = {
     },
     modify: (id, name, email, phone, address, password) => {
         return new Promise((resolve, reject) => {
-            UserModel.findById(id).then(u => {
+            UserModel.findById(id, {
+                include: [RoleModel]
+            }).then(u => {
                 if (password.trim().length > 0) genSalt(8, (err1, salt) => {
                     hash(password, salt, (err2, hashed) => {
                         u.password = hashed;
@@ -132,8 +122,15 @@ export const UserQueryObject = {
         return new Promise((resolve, reject) => {
             UserModel.findAll({
                 offset: page * 12,
-                limit: 12
+                limit: 12,
+                include: [RoleModel]
             }).then(u => resolve(u))
+            .catch(err => reject(err));
+        });
+    },
+    count: () => {
+        return new Promise((resolve, reject) => {
+            UserModel.count().then(r => resolve(r))
             .catch(err => reject(err));
         });
     }
