@@ -4,6 +4,7 @@ import { useGQL } from './graphql/config/graphql';
 import morgan from 'morgan';
 import { environment } from './environment';
 import { UserQueryObject } from './db/queries';
+import { createIOServer } from './socket';
 
 const app = express();
 
@@ -18,9 +19,10 @@ app.use((req, res, next) => {
     next();
 });
 useGQL(app);
+createIOServer(app);
 
 syncDB().then(v => {
-    app.listen(11789, () => {
+    app.listen(process.env.PORT || 11789, () => {
         UserModel.find({
             where: {
                 email: environment.adminUser
