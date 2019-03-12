@@ -32,7 +32,7 @@ syncDB().then(v => {
                 'Khaled', 
                 environment.adminUser,
                 '98876',
-                '7, Kawu Alabi',
+                '7, Somewhere in France',
                 environment.adminPass
                 ).then(u => console.log('Admin created', u));
             else console.log('Server running', v)

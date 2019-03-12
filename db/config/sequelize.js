@@ -28,7 +28,7 @@ UserModel.hasMany(TicketModel, {
 
 function syncDB() {
     return sequelize.sync({
-        force: false
+        force: environment.mode == 'development'
     });
 }
 
