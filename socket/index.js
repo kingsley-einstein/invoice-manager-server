@@ -1,17 +1,24 @@
 import io from 'socket.io';
 import http from 'http';
 
-export async function createIOServer(app) {
+export function createIOServer(app) {
     const server = http.createServer(app);
     const socketIO = io(server, {
         origins: '*:*'
     });
 
-    await socketIO.on('connection', async (socket) => {
+     socketIO.on('connection', (socket) => {
         console.log(`Connected to socket with id ${socket.id}`);
 
-        await socket.on('SEND_MESSAGE', async (data) => {
-            await socketIO.emit('MESSAGE', data);
+        socket.on('SEND_MESSAGE', (data) => {
+            socketIO.emit('MESSAGE', data);
         });
+
+        socket.on('LEAVE', (data) => {
+            console.log(`Socket with id ${socket.id} disconnecting`)
+            socket.disconnect();        
+        })
     });
+
+    return server;
 };
