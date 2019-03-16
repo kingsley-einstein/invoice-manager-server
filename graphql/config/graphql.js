@@ -42,6 +42,10 @@ const Query = new GraphQLObjectType({
             },
             resolve: (_, args) => UserQueryObject.findAll(args.page)
         },
+        findAllUsersWithNoLimit: {
+            type: new GraphQLList(User),
+            resolve: (_, args) => UserQueryObject.findAllWithNoLimit()
+        },
         countAllUsers: {
             type: GraphQLInt,
             resolve: (_, args) => UserQueryObject.count() 
@@ -120,6 +124,15 @@ const Query = new GraphQLObjectType({
                 }
             },
             resolve: (_, args) => TicketQueryObject.countForMonth(args.month)
+        },
+        countTicketsByUsers: {
+            type: GraphQLInt,
+            args: {
+                id: {
+                    type: new GraphQLNonNull(GraphQLID)
+                }
+            },
+            resolve: (_, args) => TicketQueryObject.countByUsers(args.id)
         }
     }
 });

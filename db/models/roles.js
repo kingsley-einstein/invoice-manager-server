@@ -15,7 +15,7 @@ export const Role = (sequelize, DataTypes) => {
     role.prototype.invert = function() {
         let role = this;
 
-        if (role.value == 'user') role.value = 'admin';
+        if (role.value == 'user') role.value = 'moderator';
         else role.value = 'user';
 
         return role.save().then(r => {

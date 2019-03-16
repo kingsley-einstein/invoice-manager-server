@@ -133,5 +133,17 @@ export const UserQueryObject = {
             UserModel.count().then(r => resolve(r))
             .catch(err => reject(err));
         });
+    },
+    findAllWithNoLimit: () => {
+        return new Promise((resolve, reject) => {
+            UserModel.findAll({
+                where: {
+                    id: {
+                        $gt: 1
+                    }
+                }
+            }).then(r => resolve(r))
+            .catch(err => reject(err));
+        });
     }
 };

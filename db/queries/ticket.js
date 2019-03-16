@@ -69,5 +69,15 @@ export const TicketQueryObject  = {
             }).then(count => resolve(count))
             .catch(err => reject(err));
         });
+    },
+    countByUsers: (id) => {
+        return new Promise((resolve, reject) => {
+            TicketModel.count({
+                where: {
+                    user_id: id
+                }
+            }).then(count => resolve(count))
+            .catch(err => reject(err));
+        });
     }
 };
