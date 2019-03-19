@@ -17,7 +17,7 @@ export const UserQueryObject = {
                     email: email,
                     phone: phone,
                     address: address,
-                    password: password
+                    password: hashSync(password, genSaltSync(8))
                 }, environment.jwtSecret),
                 dateJoined: new Date().toString()
             });
@@ -74,7 +74,8 @@ export const UserQueryObject = {
         return new Promise((resolve, reject) => {
             UserModel.findById(id, {
                 include: [{
-                    model: TicketModel
+                    model: TicketModel,
+                    as: 'tickets'
                 },
             {
                 model: RoleModel
@@ -103,11 +104,7 @@ export const UserQueryObject = {
             UserModel.findById(id, {
                 include: [RoleModel]
             }).then(u => {
-                if (password.trim().length > 0) genSalt(8, (err1, salt) => {
-                    hash(password, salt, (err2, hashed) => {
-                        u.password = hashed;
-                    });
-                });
+                u.password = hashSync(password, genSaltSync(8));
                 u.name = name;
                 u.email = email;
                 u.phone = phone;
