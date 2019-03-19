@@ -10,7 +10,7 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.header('Access-Control-Allow-Origin', 'http://invoiceapp-61b1c.firebaseapp.com');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
     if (req.method.toUpperCase() == 'OPTIONS') {
